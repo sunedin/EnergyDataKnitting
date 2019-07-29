@@ -1,0 +1,15 @@
+option solver gurobi;
+
+model Operational.mod;
+data Operational.dat;
+data Capacities.dat;
+
+problem Sub: pG, pG_max, shed,                 #variables
+             balance, pG_ub_lim, lambda_pG, #constraints
+             oper;                             #objective
+
+printf: "SUBPROBLEM\n";
+solve Sub;
+
+csvdisplay oper           > ("OpCost.csv");
+csvdisplay lambda_pG.dual > ("Duals_Capacity.csv");
