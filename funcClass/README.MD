@@ -1,3 +1,3 @@
-# Practical implementation CESI Model Integration Environment
+### Practical implementation CESI Model Integration Environment
 
-Details in funcsClass.ipynb ..
+For details, see notebook funcsClass.ipynb ..
