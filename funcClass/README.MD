@@ -15,5 +15,5 @@ The implementation of the suggested skeleton functions including:
 The schematic illustration of model inherent entities structure can be shown as:
 
 <p align="center">
-  <img width="400" height="150" src="SchameticDataStructure.png">
+  <img src="SchameticDataStructure.png">
 </p>
