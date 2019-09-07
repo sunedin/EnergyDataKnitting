@@ -55,16 +55,17 @@ for i in 1:ITmax - 1
     push!(L,getobjectivevalue(rmp)) # get lower bound
     x_fix = getvalue(rmp[:x_inv][:]) # get invextment decisions
 
-    #### model interfacing option 1: replacing the csv-file-based data exchange using ampl python API #####
-#     ampl.getParameter("pG_ub").setValues(jl_to_ampl(x_fix))
+    # model interfacing
+    #### option 1: replacing the csv-file-based data exchange using ampl python API #####
+    # ampl.getParameter("pG_ub").setValues(jl_to_ampl(x_fix))
     #### option 2: replacing the csv-file-based data exchange using automatic CrossMapping by checking model-specific item names with common names#####
     ampl.getParameter("pG_ub").setValues(Interface.CrossMapping(x_fix, ModelA, ModelB, Common))
 
     ampl.solve()
     θ = ampl.getValue("oper")
     push!(U,getvalue(rmp[:cx]) + θ) # compute upper bound
-     print(typeof([c[2].dual() for c in ampl.getConstraint("lambda_pG")]))
-#     λ = ampl_to_jl([c[2].dual() for c in ampl.getConstraint("lambda_pG")]) # option 1
+    print(typeof([c[2].dual() for c in ampl.getConstraint("lambda_pG")]))
+    #λ = ampl_to_jl([c[2].dual() for c in ampl.getConstraint("lambda_pG")]) # option 1
     λ = Interface.CrossMapping([c[2].dual() for c in ampl.getConstraint("lambda_pG")], ModelB, ModelA, Common) # option 2
     print(typeof(λ))
 
