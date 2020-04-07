@@ -1,5 +1,5 @@
 set sG;  # SET OF THERMAL GENERATORS
-set sF;  # SET OF FUELS
+set sF ordered;  # SET OF FUELS
 set sT := 1..730;
 
 param pG_ub{sG};     # capacity (MW) received from "Capacities.dat";

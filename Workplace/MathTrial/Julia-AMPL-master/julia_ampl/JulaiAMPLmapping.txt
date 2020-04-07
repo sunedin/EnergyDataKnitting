@@ -1,0 +1,1 @@
+{"coal": "Gcoal", "ocgt": "Gocgt", "ccgt": "Gccgt", "diesel": "Gdies", "nuclear": "Gnucl"}

@@ -21,16 +21,12 @@ ampl = amplapi.AMPL()
 # call python interfacing package
 py"""
 import sys
-sys.path.insert(0, "./EnergyDataKnitting/Workplace/MathTrial/Julia-AMPL-master/julia_ampl")
+sys.path.insert(0, "../")
 """
 Interface = pyimport("MappingPassOver")
 
-# input info about model-specific item names and common names
-G_JL = ["coal", "ocgt", "ccgt", "diesel", "nuclear"]
-G_AMPL = ["Gcoal", "Gocgt", "Gccgt", "Gnucl", "Gdies"]
-Common = ["Coal", "Ocgt", "Ccgt", "Diesel", "Nuclear"]
-ModelA = G_JL
-ModelB = G_AMPL
+# Model => G_JL
+# ModelB => G_AMPL
 
 # set parameters
 const ITmax = 20 # max number of iterations
@@ -55,18 +51,14 @@ for i in 1:ITmax - 1
     push!(L,getobjectivevalue(rmp)) # get lower bound
     x_fix = getvalue(rmp[:x_inv][:]) # get invextment decisions
 
-    # model interfacing
-    #### option 1: replacing the csv-file-based data exchange using ampl python API #####
-    # ampl.getParameter("pG_ub").setValues(jl_to_ampl(x_fix))
-    #### option 2: replacing the csv-file-based data exchange using automatic CrossMapping by checking model-specific item names with common names#####
-    ampl.getParameter("pG_ub").setValues(Interface.CrossMapping(x_fix, ModelA, ModelB, Common))
-
+    #### replacing the csv-file-based data exchange using Interface API CrossMapping and amplpy #####
+    # mapping model-specific item names with common names
+    ampl.getParameter("pG_ub").setValues(Interface.CrossMapping(x_fix, Interface.ModelA, Interface.ModelB, Interface.Common))
     ampl.solve()
     θ = ampl.getValue("oper")
     push!(U,getvalue(rmp[:cx]) + θ) # compute upper bound
     print(typeof([c[2].dual() for c in ampl.getConstraint("lambda_pG")]))
-    #λ = ampl_to_jl([c[2].dual() for c in ampl.getConstraint("lambda_pG")]) # option 1
-    λ = Interface.CrossMapping([c[2].dual() for c in ampl.getConstraint("lambda_pG")], ModelB, ModelA, Common) # option 2
+    λ = Interface.CrossMapping([c[2].dual() for c in ampl.getConstraint("lambda_pG")], Interface.ModelB, Interface.ModelA, Interface.Common) # option 2
     print(typeof(λ))
 
     @constraint(rmp,rmp[:θ] >= θ + sum(λ[i] * (rmp[:x_inv][i] - x_fix[i]) for i in 1:5)) # update relaxed master problem

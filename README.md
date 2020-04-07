@@ -3,5 +3,14 @@ The project will create a an integrated modelling environment that facilitates
 interaction of models from different disciplines using different methodologies (optimization, simulation,
 quantitative/qualitative) and written in different languages. 
 
-The main coding language is python and data file format is csv.
+The default programming language is python and data file format is 2-dimential tables (in csv, excel, jason, etc).
+
+# Entries:
+Data transalating, julia_ampl links
+[DataExchangeAPI](Workplace/MathTrial/Julia-AMPL-master/julia_ampl)
+
+Class of functions: [FuncClass](funcClass)
+
+Tutorials: [Notebooks](tutorials)
+
 
